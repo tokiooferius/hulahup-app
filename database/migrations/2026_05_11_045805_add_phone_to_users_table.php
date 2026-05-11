@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     * Menambahkan kolom phone ke tabel users.
+     */
+    public function up(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            // Kita tambah kolom phone setelah kolom email
+            $table->string('phone')->nullable()->after('email');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     * Menghapus kembali kolom phone jika migration di-rollback.
+     */
+    public function down(): void
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('phone');
+        });
+    }
+};
