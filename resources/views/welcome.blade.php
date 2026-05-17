@@ -3,59 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hulahup - Food-TyU</title>
-    
+    <title>Hulahup - Kantin Digital Tel-U</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-foodtyu.png') }}">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-serif-custom { font-family: 'Playfair Display', serif; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FBF9E4; }
+        .bg-pattern {
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            opacity: 0.05;
+        }
     </style>
 </head>
-<body class="bg-gray-200 flex justify-center items-center min-h-screen">
+<body class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-pattern"></div>
 
-    <div class="w-[375px] h-[812px] bg-[#FDFBD7] shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden relative flex flex-col items-center p-6 rounded-[40px] border-[8px] border-white">
-        
-        <div class="w-full flex justify-between px-4 pt-2 text-[14px] font-bold text-black mb-10">
-            <span>9:41</span>
-            <div class="flex gap-1.5 items-center">
-                <i class="fa-solid fa-signal text-[12px]"></i>
-                <i class="fa-solid fa-wifi text-[12px]"></i>
-                <i class="fa-solid fa-battery-full text-[16px]"></i>
+    <div class="relative z-10 text-center px-6">
+        <div class="mb-8 flex justify-center">
+            <div class="p-6 bg-white rounded-[50px] shadow-2xl shadow-orange-200/50 animate-bounce duration-[3000ms]">
+                <img src="{{ asset('images/logo-foodtyu.png') }}" alt="Logo Hulahup" class="w-32 h-32 object-contain">
             </div>
         </div>
 
-        <div class="mt-12 mb-6">
-            <div class="w-64 h-64 rounded-full bg-white flex items-center justify-center shadow-xl overflow-hidden border-[6px] border-white ring-4 ring-[#A7C7E7]/30">
-                <img src="{{ asset('images/logo-foodtyu.png') }}" 
-                     alt="Food-TyU Illustration" 
-                     class="w-full h-full object-cover"
-                     onerror="this.onerror=null; this.src='https://via.placeholder.com/256x256/5D89B3/FFFFFF?text=Food-TyU+Logo';">
-            </div>
+        <h1 class="text-6xl font-black italic text-[#122C4F] tracking-tighter mb-2">Hulahup.</h1>
+        <div class="flex items-center justify-center gap-2 mb-8">
+            <span class="h-[2px] w-8 bg-[#5B88B2]"></span>
+            <p class="text-slate-500 font-bold uppercase tracking-[0.3em] text-xs">Kantin Digital Tel-U</p>
+            <span class="h-[2px] w-8 bg-[#5B88B2]"></span>
         </div>
 
-        <div class="text-center mt-4">
-            <h1 class="text-5xl font-serif-custom font-black text-black tracking-tight">Food-TyU</h1>
-        </div>
+        <p class="text-slate-400 max-w-md mx-auto mb-12 font-medium leading-relaxed">
+            Pesan makanan kantin favoritmu tanpa antri. Cepat, praktis, dan langsung dari genggamanmu.
+        </p>
 
-        <div class="w-full px-6 absolute bottom-12 text-center">
-            
-            <a href="/home" class="block w-full bg-[#5D89B3] text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-transform duration-150 mb-4 uppercase tracking-wider">
-                Get Started
+        <div class="flex gap-4 justify-center">
+            <a href="/login" class="bg-[#122C4F] text-white px-10 py-4 rounded-full font-bold shadow-xl hover:scale-105 transition-all">
+                Masuk
             </a>
-            
-            <p class="text-sm text-gray-600 font-medium">
-                Already a member? 
-                <a href="/login" class="text-black font-extrabold border-b-2 border-black ml-1">Login</a>
-            </p>
-            
-            <div class="w-32 h-1.5 bg-black mx-auto mt-10 rounded-full opacity-90"></div>
+            <a href="/signup" class="border-2 border-[#122C4F] text-[#122C4F] px-10 py-4 rounded-full font-bold hover:bg-[#122C4F] hover:text-white transition-all">
+                Daftar Akun
+            </a>
         </div>
+
+        <p class="mt-20 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            Made with ❤️ for Telkom University Purwokerto
+        </p>
     </div>
 
+    <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-[#5B88B2] opacity-10 rounded-full blur-3xl"></div>
+    <div class="absolute -top-20 -right-20 w-64 h-64 bg-orange-400 opacity-10 rounded-full blur-3xl"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></script>
 </body>
 </html>

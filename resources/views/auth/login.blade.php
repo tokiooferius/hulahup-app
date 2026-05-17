@@ -19,7 +19,10 @@
             <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-[#EAD8B1]/20 rounded-full"></div>
             
             <div class="z-10 text-center">
-                <h1 class="text-6xl font-black italic text-[#EAD8B1] mb-6 tracking-tighter">Hulahup.</h1>
+                <div class="mb-6 flex justify-center">
+                    <img src="{{ asset('images/logo-foodtyu.png') }}" alt="Logo Hulahup" class="w-24 h-24 object-contain">
+                </div>
+                <h1 class="text-5xl font-black italic text-[#EAD8B1] mb-4 tracking-tighter">Hulahup.</h1>
                 <p class="text-white text-lg opacity-80 leading-relaxed font-medium">
                     Pesan makanan kantin Tel-U <br> jadi lebih mudah dan cepat.
                 </p>
@@ -35,12 +38,24 @@
                 <p class="text-gray-500 mt-2 font-medium">Selamat datang kembali, silakan masuk.</p>
             </div>
 
+            @if(session('success'))
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-r-xl">
+                    <p class="text-xs font-bold">{{ session('success') }}</p>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-r-xl animate-bounce">
+                    <p class="text-xs font-bold">{{ session('error') }}</p>
+                </div>
+            @endif
+
             <form action="/login" method="POST" class="space-y-6">
-                @csrf <div class="space-y-2">
-                    <label class="text-sm font-bold text-gray-700 ml-1">Email Mahasiswa</label>
-                    <input type="email" name="email" required 
-                        class="w-full bg-white border border-gray-200 rounded-2xl py-4 px-6 outline-none focus:ring-4 focus:ring-[#3A6D8C]/10 focus:border-[#3A6D8C] transition-all"
-                        placeholder="nama@student.telkomuniversity.ac.id">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input type="text" name="username" placeholder="Masukkan username kamu" 
+                        class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" required>
                 </div>
 
                 <div class="space-y-2">

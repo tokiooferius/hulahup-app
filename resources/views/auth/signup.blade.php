@@ -23,32 +23,55 @@
             <form action="/signup" method="POST" class="space-y-4">
                 @csrf 
                 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-700 ml-1">Nama Lengkap</label>
-                    <input type="text" name="name" required 
-                        class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 px-6 outline-none focus:ring-4 focus:ring-[#3A6D8C]/10 focus:border-[#3A6D8C] transition-all"
-                        placeholder="Masukkan nama lengkap">
-                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Nama Lengkap</label>
+                        <input type="text" name="name" placeholder="Masukkan nama lengkap" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-700 ml-1">Email Student</label>
-                    <input type="email" name="email" required 
-                        class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 px-6 outline-none focus:ring-4 focus:ring-[#3A6D8C]/10 focus:border-[#3A6D8C] transition-all"
-                        placeholder="nama@student.telkomuniversity.ac.id">
-                </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Username</label>
+                        <input type="text" name="username" placeholder="Buat username unik" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-700 ml-1">Nomor WhatsApp</label>
-                    <input type="text" name="phone" required 
-                        class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 px-6 outline-none focus:ring-4 focus:ring-[#3A6D8C]/10 focus:border-[#3A6D8C] transition-all"
-                        placeholder="0812xxxx">
-                </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Email Student / Umum</label>
+                        <input type="email" name="email" placeholder="contoh@gmail.com" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
 
-                <div class="space-y-1">
-                    <label class="text-xs font-bold text-gray-700 ml-1">Password</label>
-                    <input type="password" name="password" required 
-                        class="w-full bg-white border border-gray-200 rounded-2xl py-3.5 px-6 outline-none focus:ring-4 focus:ring-[#3A6D8C]/10 focus:border-[#3A6D8C] transition-all"
-                        placeholder="••••••••">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Nomor WhatsApp</label>
+                        <input type="text" name="phone" placeholder="0812xxxx" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">NIM Mahasiswa (Opsional)</label>
+                        <input type="text" name="nim" placeholder="Contoh: 103112430257" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200">
+                        <p class="text-xs text-gray-400 mt-1">*Kosongkan jika bukan mahasiswa Tel-U</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Alamat Lengkap</label>
+                        <textarea name="address" placeholder="Jl. Panjaitan No. 128, Purwokerto" rows="2"
+                                  class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Password</label>
+                        <input type="password" name="password" placeholder="••••••••" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-1">Konfirmasi Password</label>
+                        <input type="password" name="password_confirmation" placeholder="••••••••" 
+                               class="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-200" required>
+                    </div>
                 </div>
 
                 <div class="pt-4">

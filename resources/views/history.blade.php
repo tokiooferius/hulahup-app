@@ -27,41 +27,38 @@
     <main class="flex-1 p-10">
         <h2 class="text-3xl font-bold text-[#122C4F] mb-6">Riwayat Pesanan</h2>
 
-        <div class="space-y-4">
-            <div class="bg-white p-6 rounded-3xl shadow-sm flex justify-between items-center">
-                <div class="flex gap-4">
-                    <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-utensils text-[#5B88B2]"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-gray-800">Mie Ayam Bakso & Ice Americano</h3>
-                        <p class="text-sm text-gray-500">11 Mei 2026 • 13:45 WIB</p>
-                        <span class="mt-2 inline-block px-3 py-1 bg-green-100 text-green-600 text-xs rounded-full font-semibold">Selesai</span>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="font-bold text-[#122C4F]">RP 30.000</p>
-                    <button class="text-[#5B88B2] text-sm font-semibold hover:underline mt-2">Lihat Detail</button>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-3xl shadow-sm flex justify-between items-center opacity-80">
-                <div class="flex gap-4">
-                    <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-hamburger text-[#5B88B2]"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg text-gray-800">Chicken Katsu Curry</h3>
-                        <p class="text-sm text-gray-500">10 Mei 2026 • 12:10 WIB</p>
-                        <span class="mt-2 inline-block px-3 py-1 bg-blue-100 text-blue-600 text-xs rounded-full font-semibold">Diproses</span>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="font-bold text-[#122C4F]">RP 22.000</p>
-                    <button class="text-[#5B88B2] text-sm font-semibold hover:underline mt-2">Lihat Detail</button>
-                </div>
+        <div id="order-history-list" class="space-y-4">
+            <div class="bg-white p-6 rounded-3xl shadow-sm text-slate-500 border border-slate-100">
+                <p class="font-medium">Riwayat pesanan akan tampil di sini setelah kamu melakukan pembayaran.</p>
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const historyContainer = document.getElementById('order-history-list');
+            const orders = JSON.parse(localStorage.getItem('hulahup_orders')) || [];
+
+            if (orders.length > 0 && historyContainer) {
+                historyContainer.innerHTML = orders.map(order => `
+                    <div class="bg-white p-6 rounded-[30px] shadow-sm flex justify-between items-center border border-slate-50 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-blue-50 text-[#5B88B2] rounded-2xl flex items-center justify-center">
+                                <i class="fa-solid fa-receipt text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-[#122C4F]">${order.order_id}</h4>
+                                <p class="text-[10px] text-slate-400 font-medium">${order.date}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-black text-[#122C4F] mb-1">${order.total}</p>
+                            <span class="px-3 py-1 bg-green-100 text-green-600 text-[10px] rounded-full font-bold uppercase tracking-widest">${order.status}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
 </body>
 </html>
