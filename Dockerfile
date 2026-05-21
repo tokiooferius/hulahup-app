@@ -49,7 +49,6 @@ RUN apk add --no-cache \
         gd \
         opcache \
         pcntl \
-        tokenizer \
         fileinfo
 
 # Install Composer
