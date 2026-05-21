@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Voucher extends Model
 {
     protected $fillable = [
+        'canteen_id',
         'code',
         'description',
         'discount_percentage',
@@ -23,4 +24,12 @@ class Voucher extends Model
         'valid_from' => 'datetime',
         'valid_to' => 'datetime',
     ];
+
+    /**
+     * Get the canteen this voucher belongs to
+     */
+    public function canteen()
+    {
+        return $this->belongsTo(Canteen::class);
+    }
 }

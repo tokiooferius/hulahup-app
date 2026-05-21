@@ -75,6 +75,14 @@
                 <i class="fa-solid fa-utensils text-lg"></i> 
                 <span>Menu Kantin</span>
             </a>
+            <a href="/canteens" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
+                <i class="fa-solid fa-store text-lg"></i> 
+                <span>Daftar Kantin</span>
+            </a>
+            <a href="/orders/active" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
+                <i class="fa-solid fa-clock text-lg"></i> 
+                <span>Pesanan Aktif</span>
+            </a>
             <a href="/history" class="flex items-center gap-3 p-3 text-gray-400 hover:bg-blue-50 hover:text-blue-900 rounded-xl transition">
                 <i class="fas fa-history"></i>
                 <span>Riwayat Pesan</span>
@@ -204,270 +212,39 @@
         <div id="menuSection" class="scroll-mt-24">
             <h2 class="text-lg font-bold mb-4" id="sectionTitle">Menu Kantin</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="foodContainer">
-            
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Mie Ayam Bakso" data-base-price="18000">
-                <img src="{{ asset('images/Chicken Noodle with Meatball.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Mie Ayam Bakso</h3>
-                        <p class="text-xs text-gray-500">Kenyang & Lezat</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.8</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 18.000</span>
-                    <button onclick="addToCart('Mie Ayam Bakso', 18000, '{{ asset('images/Chicken Noodle with Meatball.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Seblak Jeletot" data-base-price="15000">
-                <img src="{{ asset('images/seblak.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Seblak Jeletot</h3>
-                        <p class="text-xs text-gray-500">Pedas Mantap</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.9</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 15.000</span>
-                    <button onclick="addToCart('Seblak Jeletot', 15000, '{{ asset('images/seblak.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Chicken Katsu" data-base-price="22000">
-                <img src="{{ asset('images/katsu.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Chicken Katsu</h3>
-                        <p class="text-xs text-gray-500">Kenyang & Crunchy</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.7</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 22.000</span>
-                    <button onclick="addToCart('Chicken Katsu', 22000, '{{ asset('images/katsu.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Sate Taichan" data-base-price="20000">
-                <img src="{{ asset('images/taichan.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Sate Taichan</h3>
-                        <p class="text-xs text-gray-500">Gurih & Pedas</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.8</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 20.000</span>
-                    <button onclick="addToCart('Sate Taichan', 20000, '{{ asset('images/taichan.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Siomay Bandung" data-base-price="12000">
-                <img src="{{ asset('images/siomay.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Siomay Bandung</h3>
-                        <p class="text-xs text-gray-500">Ikan Tenggiri Asli</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.6</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 12.000</span>
-                    <button onclick="addToCart('Siomay Bandung', 12000, '{{ asset('images/siomay.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[30px] shadow-sm hover:shadow-xl transition-all border border-slate-50 food-card" data-name="Nasi Goreng Spesial" data-base-price="15000">
-                <div class="h-44 overflow-hidden rounded-[25px] mb-4">
-                    <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=1925&auto=format&fit=crop" 
-                         class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
-                         alt="Nasi Goreng">
-                </div>
-                <div class="px-2">
-                    <div class="flex justify-between items-center">
-                        <h4 class="menu-name font-bold text-[#122C4F] text-lg uppercase tracking-tight">Nasi Goreng Spesial</h4>
-                        <span class="text-xs font-bold text-yellow-500 bg-yellow-50 px-2 py-1 rounded-full">
-                            <i class="fa-solid fa-star"></i> 4.9
+            @forelse($menus as $menu)
+                <div data-category="{{ $menu->category }}" data-canton="{{ $menu->category }}" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="{{ $menu->name }}" data-base-price="{{ $menu->price }}">
+                    <div class="mb-2 flex items-center justify-between">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                            🏪 {{ $menu->canteen->name ?? 'Kantin' }}
+                        </span>
+                        <span class="text-xs text-gray-500 font-medium">
+                            👩‍🍳 {{ $menu->canteen->ibuKantin->name ?? '-' }}
                         </span>
                     </div>
-                    <p class="text-slate-400 text-[11px] mt-1 font-medium italic">Nasi Goreng Telur & Kerupuk</p>
-                    <div class="flex justify-between items-center mt-6">
-                        <span class="text-[#5B88B2] font-black text-xl product-price">RP 15.000</span>
-                        <button onclick="addToCart('Nasi Goreng Spesial', 15000, 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?q=80&w=1925&auto=format&fit=crop'); toggleCart()" class="bg-[#122C4F] text-white w-12 h-12 rounded-[18px] hover:bg-[#5B88B2] transition">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
+                    <img src="{{ $menu->image_url ?: 'https://via.placeholder.com/300' }}" alt="{{ $menu->name }}" class="w-full h-44 object-cover rounded-[24px] mb-4 cursor-pointer hover:opacity-75 transition" onclick="showMenuDetailFromHome({{ json_encode($menu) }})">
+                    <div class="flex justify-between items-start">
+                        <div class="cursor-pointer hover:text-orange-500 transition" onclick="showMenuDetailFromHome({{ json_encode($menu) }})">
+                            <h3 class="menu-name font-bold text-gray-800 text-lg">{{ $menu->name }}</h3>
+                            <p class="text-xs text-gray-500 line-clamp-2">{{ $menu->description }}</p>
+                        </div>
+                        <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ {{ $menu->rating ?? '4.7' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="font-extrabold text-[#122C4F] product-price">RP {{ number_format($menu->price, 0, ',', '.') }}</span>
+                        <div class="flex gap-2">
+                            <button onclick="event.stopPropagation(); showMenuDetailFromHome({{ json_encode($menu) }})" class="bg-blue-500 hover:bg-blue-600 text-white w-10 h-10 rounded-2xl flex items-center justify-center transition-transform" title="Detail">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                            <button onclick="addToCart('{{ $menu->name }}', {{ $menu->price }}, '{{ $menu->image_url ?: 'https://via.placeholder.com/300' }}', {{ $menu->canteen_id }}); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div data-category="beverage" data-canton="beverage" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Ice Americano" data-base-price="12000">
-                <img src="{{ asset('images/ice-americano.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Ice Americano</h3>
-                        <p class="text-xs text-gray-500">Segar & Melek</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.5</span>
+            @empty
+                <div class="col-span-3 text-center py-12">
+                    <p class="text-gray-500 font-medium">Belum ada menu tersedia saat ini</p>
                 </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 12.000</span>
-                    <button onclick="addToCart('Ice Americano', 12000, '{{ asset('images/ice-americano.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="beverage" data-canton="beverage" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Es Teh Manis" data-base-price="8000">
-                <img src="{{ asset('images/esteh.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Es Teh Manis</h3>
-                        <p class="text-xs text-gray-500">Manis Alami</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.5</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 8.000</span>
-                    <button onclick="addToCart('Es Teh Manis', 8000, '{{ asset('images/esteh.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Ramen Shoyu" data-base-price="25000">
-                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=500" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Ramen Shoyu</h3>
-                        <p class="text-xs text-gray-500">Kuah Kaldu Gurih</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.9</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 25.000</span>
-                    <button onclick="addToCart('Ramen Shoyu', 25000, 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=500'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Bakso Malang" data-base-price="19000">
-                <img src="{{ asset('images/baksomalang.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Bakso Malang</h3>
-                        <p class="text-xs text-gray-500">Kuah Hangat Gurih</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.8</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 19.000</span>
-                    <button onclick="addToCart('Bakso Malang', 19000, '{{ asset('images/baksomalang.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Soto Ayam" data-base-price="17000">
-                <img src="{{ asset('images/sotoayam.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Soto Ayam</h3>
-                        <p class="text-xs text-gray-500">Tradisional Nusantara</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.7</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 17.000</span>
-                    <button onclick="addToCart('Soto Ayam', 17000, '{{ asset('images/sotoayam.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="heavy" data-canton="heavy" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Lumpia Goreng" data-base-price="11000">
-                <img src="{{ asset('images/lumpiagoreng.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Lumpia Goreng</h3>
-                        <p class="text-xs text-gray-500">5 Pcs Crispy</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.6</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 11.000</span>
-                    <button onclick="addToCart('Lumpia Goreng', 11000, '{{ asset('images/lumpiagoreng.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="beverage" data-canton="beverage" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Strawberry Smoothie" data-base-price="14000">
-                <img src="{{ asset('images/strawberrysmoothie.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Strawberry Smoothie</h3>
-                        <p class="text-xs text-gray-500">Fresh & Creamy</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.7</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 14.000</span>
-                    <button onclick="addToCart('Strawberry Smoothie', 14000, '{{ asset('images/strawberrysmoothie.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="beverage" data-canton="beverage" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Caramel Frappuccino" data-base-price="20000">
-                <img src="{{ asset('images/caramelfrappuccino.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Caramel Frappuccino</h3>
-                        <p class="text-xs text-gray-500">Cold & Sweet</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.9</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 20.000</span>
-                    <button onclick="addToCart('Caramel Frappuccino', 20000, '{{ asset('images/caramelfrappuccino.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="snack" data-canton="snack" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Roti Bakar Coklat" data-base-price="9000">
-                <img src="{{ asset('images/rotibakarcoklat.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Roti Bakar Coklat</h3>
-                        <p class="text-xs text-gray-500">Toasted & Melted</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.6</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 9.000</span>
-                    <button onclick="addToCart('Roti Bakar Coklat', 9000, '{{ asset('images/rotibakarcoklat.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="snack" data-canton="snack" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Donat Coklat" data-base-price="10000">
-                <img src="{{ asset('images/donatcoklat.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Donat Coklat</h3>
-                        <p class="text-xs text-gray-500">3 Pcs Fluffy</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.8</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 10.000</span>
-                    <button onclick="addToCart('Donat Coklat', 10000, '{{ asset('images/donatcoklat.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
-            <div data-category="snack" data-canton="snack" class="menu-item food-item bg-white p-4 rounded-[32px] shadow-sm hover:shadow-md transition hover:-translate-y-2 hover:shadow-xl transition-all duration-300" data-name="Tahu Goreng" data-base-price="7000">
-                <img src="{{ asset('images/tahugoreng.png') }}" class="w-full h-44 object-cover rounded-[24px] mb-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="menu-name font-bold text-gray-800 text-lg">Tahu Goreng</h3>
-                        <p class="text-xs text-gray-500">6 Pcs Golden</p>
-                    </div>
-                    <span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-1 rounded-full font-bold">⭐ 4.5</span>
-                </div>
-                <div class="flex justify-between items-center mt-4">
-                    <span class="font-extrabold text-[#122C4F] product-price">RP 7.000</span>
-                    <button onclick="addToCart('Tahu Goreng', 7000, '{{ asset('images/tahugoreng.png') }}'); toggleCart()" class="bg-[#122C4F] text-white w-10 h-10 rounded-2xl flex items-center justify-center hover:bg-blue-800 hover:scale-105 active:scale-95 transition-transform">+</button>
-                </div>
-            </div>
-
+            @endforelse
         </div>
 
         <div id="recommendationSection" class="hidden mt-12 pt-8 border-t-2 border-dashed border-gray-200">
@@ -851,12 +628,12 @@
             }
         });
 
-        function addToCart(name, price, img) {
-            const existingItem = cart.find(item => item.name === name);
+        function addToCart(name, price, img, canteenId) {
+            const existingItem = cart.find(item => item.name === name && item.canteen_id === canteenId);
             if (existingItem) {
                 existingItem.qty += 1;
             } else {
-                cart.push({ name, price, img, qty: 1 });
+                cart.push({ name, price, img, canteen_id: canteenId, qty: 1 });
             }
             updateCartUI();
         }
@@ -1208,13 +985,25 @@
             const discountValue = Math.round(subtotal * discountPercent / 100);
             const totalPaid = subtotal - discountValue;
             
-            // Prepare order data for database
-            const orderItemsForDb = cart.map(item => ({
-                name: item.name,
-                price: item.price,
-                qty: item.qty,
-                subtotal: item.price * item.qty
-            }));
+            // GROUP CART ITEMS BY CANTEEN_ID - THIS IS THE FIX!
+            const cartByCanteen = {};
+            cart.forEach(item => {
+                const canteenId = item.canteen_id;
+                if (!cartByCanteen[canteenId]) {
+                    cartByCanteen[canteenId] = {
+                        items: [],
+                        total: 0
+                    };
+                }
+                const itemTotal = item.price * item.qty;
+                cartByCanteen[canteenId].items.push({
+                    name: item.name,
+                    price: item.price,
+                    qty: item.qty,
+                    subtotal: itemTotal
+                });
+                cartByCanteen[canteenId].total += itemTotal;
+            });
 
             // Save to localStorage for history display
             const orderData = {
@@ -1239,7 +1028,7 @@
             else if (selectedPaymentType === 'qris') paymentMethodNote = 'QRIS';
             else if (selectedPaymentType === 'saldo') paymentMethodNote = 'Saldo TyU-Pay';
 
-            // Save to database via API
+            // Save to database via API - NOW WITH CART_BY_CANTEEN!
             fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -1248,8 +1037,8 @@
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    items: orderItemsForDb,
-                    total_amount: totalPaid,
+                    cart_by_canteen: cartByCanteen,  // ✅ SEND GROUPED DATA
+                    grand_total: totalPaid,           // ✅ SEND TOTAL
                     payment_method: paymentMethodNote,
                     notes: `Diskon: ${discountPercent}% (${voucherName})`
                 })
@@ -1258,16 +1047,15 @@
             .then(data => {
                 console.log('API Response:', data);
                 if (data.success) {
-                    // Success - refresh page to show updated balance
+                    // Success - show receipt modal instead of reloading
                     closeModal();
-                    const successModal = document.getElementById('successModal');
-                    successModal.classList.remove('hidden');
-                    successModal.classList.add('flex');
+                    showReceiptModal(data.orders, totalPaid, paymentMethodNote);
                     
-                    // Reload page after 2 seconds to refresh balance
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    // Clear cart and localStorage
+                    cart = [];
+                    localStorage.removeItem('cart');
+                    sessionStorage.removeItem('voucher_code');
+                    sessionStorage.removeItem('voucher_name');
                 } else {
                     // Error - show insufficient balance message (only for Saldo method)
                     closeModal();
@@ -1359,6 +1147,149 @@
         });
 
         refreshVoucherUI();
+
+        // ==================== RECEIPT MODAL ====================
+        function showReceiptModal(orders, total, paymentMethod) {
+            const html = `
+                <div id="receiptModal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+                        <!-- Header -->
+                        <div class="sticky top-0 bg-gradient-to-r from-green-500 to-green-600 p-6 text-white text-center">
+                            <i class="fas fa-check-circle text-4xl mb-2"></i>
+                            <h2 class="text-3xl font-black">Pesanan Berhasil!</h2>
+                            <p class="text-green-100 mt-1">Pesanan kamu telah dikirim ke kantin</p>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="p-8">
+                            <!-- Orders Detail -->
+                            <div class="space-y-4 mb-6">
+                                ${orders.map(order => `
+                                    <div class="bg-slate-50 p-4 rounded-xl border-l-4 border-orange-500">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <p class="font-black text-lg text-slate-900">${order.order_number}</p>
+                                                <p class="text-sm text-slate-600"><i class="fas fa-store"></i> ${order.canteen?.name || 'Kantin'}</p>
+                                            </div>
+                                            <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-bold">Rp ${new Intl.NumberFormat('id-ID').format(order.total_amount)}</span>
+                                        </div>
+                                        <div class="text-xs text-slate-600 space-y-1">
+                                            ${order.notes ? `<p><i class="fas fa-sticky-note"></i> ${order.notes}</p>` : ''}
+                                            <p><i class="fas fa-clock"></i> ${new Date(order.created_at).toLocaleString('id-ID')}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+
+                            <!-- Total Summary -->
+                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl mb-6 border border-blue-100">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-slate-600">Total Pesanan:</span>
+                                    <span class="font-bold text-lg text-slate-900">Rp ${new Intl.NumberFormat('id-ID').format(total)}</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-slate-600">Metode Pembayaran:</span>
+                                    <span class="font-semibold text-slate-900">${paymentMethod}</span>
+                                </div>
+                            </div>
+
+                            <!-- Status Info -->
+                            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                                <p class="text-sm text-blue-900">
+                                    <i class="fas fa-info-circle"></i>
+                                    Pesanan akan diproses dalam waktu <strong>5-15 menit</strong>. Pantau status di halaman <strong>Pesanan Aktif</strong>.
+                                </p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3">
+                                <button onclick="location.href='/orders/active'" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                    <i class="fas fa-clock"></i> Lihat Pesanan Aktif
+                                </button>
+                                <button onclick="document.getElementById('receiptModal').remove(); location.reload();" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                    <i class="fas fa-home"></i> Kembali ke Home
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const modalDiv = document.createElement('div');
+            modalDiv.innerHTML = html;
+            document.body.appendChild(modalDiv.firstElementChild);
+        }
+
+        // ==================== MENU DETAIL MODAL (HOME) ====================
+        function showMenuDetailFromHome(menu) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50';
+            modal.id = 'homeMenuDetailModal';
+            
+            let categoryLabel = '';
+            if (menu.category === 'heavy') categoryLabel = 'Makanan Berat';
+            else if (menu.category === 'beverage') categoryLabel = 'Minuman';
+            else if (menu.category === 'snack') categoryLabel = 'Snack';
+
+            modal.innerHTML = `
+                <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-auto">
+                    <div class="flex items-center justify-between p-4 border-b border-slate-200 sticky top-0 bg-white z-10">
+                        <h3 class="font-bold text-lg text-slate-900">Detail Menu</h3>
+                        <button onclick="document.getElementById('homeMenuDetailModal').remove()" class="text-slate-500 hover:text-slate-700 text-2xl">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="mb-4 h-48 bg-slate-200 rounded-xl overflow-hidden">
+                            <img src="${menu.image_url}" alt="${menu.name}" class="w-full h-full object-cover">
+                        </div>
+
+                        <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold mb-2">
+                            🏪 ${menu.canteen?.name || 'Kantin'}
+                        </span>
+                        
+                        <h2 class="text-2xl font-black text-slate-900 mb-2">${menu.name}</h2>
+                        <p class="text-3xl font-black text-orange-500 mb-4">Rp ${new Intl.NumberFormat('id-ID').format(menu.price)}</p>
+
+                        ${menu.description ? `
+                            <div class="bg-slate-50 p-4 rounded-xl mb-4">
+                                <h4 class="font-bold text-slate-900 mb-2">Deskripsi</h4>
+                                <p class="text-slate-700 text-sm leading-relaxed">${menu.description}</p>
+                            </div>
+                        ` : ''}
+
+                        ${menu.rating ? `
+                            <div class="bg-yellow-50 p-4 rounded-xl mb-4 border border-yellow-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <span class="font-bold text-slate-900">${menu.rating}/5</span>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="flex gap-2">
+                            <button onclick="document.getElementById('homeMenuDetailModal').remove()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-900 font-bold py-3 px-4 rounded-xl transition">
+                                Tutup
+                            </button>
+                            <button onclick="addToCart('${menu.name}', ${menu.price}, '${menu.image_url}', ${menu.canteen_id}); document.getElementById('homeMenuDetailModal').remove(); toggleCart();" 
+                                    class="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                <i class="fas fa-cart-plus"></i> Pesan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
     </script>
 
     <button onclick="toggleCart()" class="fixed bottom-8 right-8 z-50 bg-[#122C4F] text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all">

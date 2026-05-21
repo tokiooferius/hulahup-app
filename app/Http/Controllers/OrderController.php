@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -19,76 +20,112 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      * API endpoint untuk save order ke database
+     * UPDATED: Create separate orders per canteen (split payment)
      */
     public function store(Request $request)
     {
         $request->validate([
-            'items' => 'required|array',
-            'items.*.name' => 'required|string',
-            'items.*.price' => 'required|numeric',
-            'items.*.qty' => 'required|integer|min:1',
-            'total_amount' => 'required|numeric',
+            'cart_by_canteen' => 'required|array', // Array of [canteen_id => [items, total]]
+            'grand_total' => 'required|numeric',
             'payment_method' => 'required|string',
             'notes' => 'nullable|string',
         ]);
 
         try {
             $user = Auth::user();
-            $totalAmount = (float) $request->total_amount;
+            $grandTotal = (float) $request->grand_total;
             $paymentMethod = $request->payment_method;
+            $cartByCanteen = $request->cart_by_canteen;
             
             // DEFENSIVE PROGRAMMING: Jika bayar pakai Saldo TyU-Pay, validasi saldo mencukupi
             if ($paymentMethod === 'Saldo TyU-Pay') {
-                if ($user->balance < $totalAmount) {
+                if ($user->balance < $grandTotal) {
                     return response()->json([
                         'success' => false,
-                        'message' => 'Gagal memesan! Saldo TyU-Pay kamu tidak mencukupi. Saldo: Rp ' . number_format($user->balance, 0, ',', '.') . ', Total: Rp ' . number_format($totalAmount, 0, ',', '.') . '. Silakan lakukan top up terlebih dahulu.',
+                        'message' => 'Gagal memesan! Saldo TyU-Pay kamu tidak mencukupi. Saldo: Rp ' . number_format($user->balance, 0, ',', '.') . ', Total: Rp ' . number_format($grandTotal, 0, ',', '.') . '. Silakan lakukan top up terlebih dahulu.',
                         'balance' => $user->balance,
-                        'required' => $totalAmount,
+                        'required' => $grandTotal,
                     ], 400);
                 }
             }
             
-            // Generate order number
-            $orderNumber = Order::generateOrderNumber();
+            // PRE-GENERATE ORDER NUMBERS FOR ALL CANTEENS (atomic, outside transaction)
+            // Get the base order number, then increment it for each canteen
+            $baseOrderNumber = Order::generateOrderNumber();
+            $baseNum = intval(substr($baseOrderNumber, 3)); // Extract number from 'ORDxxxxx'
             
-            // Create order - Store both payment method and discount info in notes
-            $notesParts = [];
-            $notesParts[] = 'Pembayaran: ' . $paymentMethod;
-            if ($request->notes) {
-                $notesParts[] = $request->notes;
+            $orderNumbers = [];
+            $canteenIndex = 0;
+            foreach ($cartByCanteen as $canteenId => $cartData) {
+                $orderNumbers[$canteenId] = 'ORD' . str_pad($baseNum + $canteenIndex, 5, '0', STR_PAD_LEFT);
+                $canteenIndex++;
             }
-            $order = Order::create([
-                'user_id' => $user->id,
-                'order_number' => $orderNumber,
-                'items' => $request->items,
-                'total_amount' => $totalAmount,
-                'status' => 'pending',
-                'notes' => implode(' | ', $notesParts),
-            ]);
             
-            // Jika bayar pakai Saldo TyU-Pay, potong saldo otomatis
-            if ($paymentMethod === 'Saldo TyU-Pay') {
-                $user->decrement('balance', $totalAmount);
-                $user->refresh();
-                $successMsg = 'Pesanan berhasil dibuat! Saldo TyU-Pay kamu otomatis terpotong.';
-            } else {
-                // Untuk metode lain (QRIS, E-Wallet): order dibuat tanpa potong saldo
-                $successMsg = 'Pesanan berhasil dibuat! Tunggu konfirmasi dari sistem pembayaran.';
-            }
+            // CREATE SEPARATE ORDERS FOR EACH CANTEEN (with transaction protection)
+            $createdOrders = [];
+            $totalDeduct = 0;
+            $successMsg = '';
+            $notes = $request->notes ?? null;
+            
+            DB::transaction(function () use (
+                &$createdOrders,
+                &$totalDeduct,
+                &$successMsg,
+                $orderNumbers,
+                $cartByCanteen,
+                $paymentMethod,
+                $user,
+                $notes
+            ) {
+                foreach ($cartByCanteen as $canteenId => $cartData) {
+                    // Get pre-generated order number
+                    $orderNumber = $orderNumbers[$canteenId];
+                    
+                    // Build notes
+                    $notesParts = [];
+                    $notesParts[] = 'Pembayaran: ' . $paymentMethod;
+                    if ($notes) {
+                        $notesParts[] = $notes;
+                    }
+                    
+                    // Create order with canteen_id - THIS IS THE FIX!
+                    $order = Order::create([
+                        'user_id' => $user->id,
+                        'canteen_id' => $canteenId, // ✅ NOW STORING CANTEEN_ID!
+                        'order_number' => $orderNumber,
+                        'items' => $cartData['items'] ?? [],
+                        'total_amount' => $cartData['total'] ?? 0,
+                        'status' => 'pending',
+                        'notes' => implode(' | ', $notesParts),
+                    ]);
+                    
+                    $createdOrders[] = $order;
+                    $totalDeduct += $order->total_amount;
+                }
+                
+                // Jika bayar pakai Saldo TyU-Pay, potong saldo otomatis
+                if ($paymentMethod === 'Saldo TyU-Pay') {
+                    $user->decrement('balance', $totalDeduct);
+                    $user->refresh();
+                    $successMsg = 'Pesanan berhasil dibuat dari ' . count($createdOrders) . ' kantin! Saldo TyU-Pay kamu otomatis terpotong.';
+                } else {
+                    // Untuk metode lain (QRIS, E-Wallet): order dibuat tanpa potong saldo
+                    $successMsg = 'Pesanan berhasil dibuat dari ' . count($createdOrders) . ' kantin! Tunggu konfirmasi dari sistem pembayaran.';
+                }
+            });
 
             return response()->json([
                 'success' => true,
                 'message' => $successMsg,
-                'order' => $order,
-                'order_id' => $order->id,
-                'order_number' => $order->order_number,
+                'orders' => $createdOrders,
+                'order_count' => count($createdOrders),
                 'balance_remaining' => $user->balance,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal membuat pesanan: ' . $e->getMessage(),
+                'error' => $e->getLine(),
             ], 500);
         }
     }
@@ -99,6 +136,75 @@ class OrderController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+    /**
+     * Get all ACTIVE orders for authenticated user (pending or processing)
+     * Used for "Pesanan Aktif" dashboard
+     */
+    public function activeOrders()
+    {
+        $user = Auth::user();
+        $orders = Order::where('user_id', $user->id)
+            ->where('status', '!=', 'completed')
+            ->with(['canteen' => function ($query) {
+                $query->select('id', 'name', 'ibu_kantin_id');
+                $query->with(['ibuKantin:id,name']);
+            }])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('orders.active', [
+            'orders' => $orders,
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Get full order details with canteen info (for receipt/tracking)
+     * API endpoint: GET /api/orders/{order}
+     */
+    public function getOrderDetails(Order $order)
+    {
+        // Verify user owns this order
+        if (Auth::id() !== $order->user_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+            ], 403);
+        }
+
+        $order->load(['canteen' => function ($query) {
+            $query->with(['ibuKantin:id,name,email']);
+        }]);
+
+        return response()->json([
+            'success' => true,
+            'order' => $order,
+            'items' => json_decode($order->items, true) ?? [],
+        ]);
+    }
+
+    /**
+     * Get all COMPLETED orders for authenticated user (riwayat/history)
+     * Used for "Riwayat Pesanan" page
+     */
+    public function orderHistory()
+    {
+        $user = Auth::user();
+        $orders = Order::where('user_id', $user->id)
+            ->where('status', '=', 'completed')
+            ->with(['canteen' => function ($query) {
+                $query->select('id', 'name', 'ibu_kantin_id');
+                $query->with(['ibuKantin:id,name']);
+            }])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('history', [
+            'orders' => $orders,
+            'user' => $user,
+        ]);
     }
 
     /**

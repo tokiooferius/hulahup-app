@@ -19,16 +19,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-    'name',
-    'username',
-    'email',
-    'nim',
-    'role',
-    'phone',
-    'address',
-    'avatar',
-    'balance',
-    'password',
+        'name',
+        'username',
+        'email',
+        'nim',
+        'role',
+        'phone',
+        'address',
+        'avatar',
+        'balance',
+        'canteen_id',
+        'password',
     ];
 
     /**
@@ -52,5 +53,53 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the canteen if user is ibu_kantin
+     */
+    public function canteen()
+    {
+        return $this->belongsTo(Canteen::class);
+    }
+
+    /**
+     * Get canteens owned by this user (if ibu_kantin)
+     */
+    public function ownedCanteens()
+    {
+        return $this->hasMany(Canteen::class, 'ibu_kantin_id');
+    }
+
+    /**
+     * Get all payments made by this user
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Check if user is admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Check if user is ibu_kantin
+     */
+    public function isIbuKantin(): bool
+    {
+        return $this->role === 'ibu_kantin';
+    }
+
+    /**
+     * Check if user is regular user/customer
+     */
+    public function isCustomer(): bool
+    {
+        return $this->role === 'user';
     }
 }

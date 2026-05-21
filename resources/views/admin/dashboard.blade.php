@@ -35,17 +35,13 @@
                 <span>Dashboard</span>
             </a>
             <hr class="opacity-20">
-            <a href="/admin/menus" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
-                <i class="fa-solid fa-utensils text-lg"></i> 
-                <span>Menu Management</span>
+            <a href="/admin/orders" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
+                <i class="fa-solid fa-list text-lg"></i> 
+                <span>Monitoring Pesanan</span>
             </a>
-            <a href="/admin/users" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
-                <i class="fa-solid fa-users text-lg"></i> 
-                <span>Users Management</span>
-            </a>
-            <a href="/admin/vouchers" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
-                <i class="fa-solid fa-ticket text-lg"></i> 
-                <span>Vouchers Management</span>
+            <a href="/admin/canteens" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
+                <i class="fa-solid fa-building text-lg"></i> 
+                <span>Kelola Kantin</span>
             </a>
             <hr class="opacity-20">
             <a href="/home" class="flex items-center gap-4 px-5 py-4 rounded-[22px] font-medium text-white/70 hover:bg-white/10 hover:text-white transition-all">
@@ -100,16 +96,16 @@
                 </div>
             </div>
 
-            <!-- Revenue -->
+            <!-- Processing Orders -->
             <div class="stat-card bg-white rounded-[25px] p-6 shadow-sm border border-slate-100">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-slate-500 text-sm font-medium mb-1">Pendapatan</p>
-                        <h3 class="text-3xl font-black text-[#122C4F]">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h3>
-                        <p class="text-xs text-green-600 font-bold mt-2">✅ Updated realtime</p>
+                        <p class="text-slate-500 text-sm font-medium mb-1">Pesanan Diproses</p>
+                        <h3 class="text-3xl font-black text-blue-600">{{ $processingOrders }}</h3>
+                        <p class="text-xs text-blue-600 font-bold mt-2">Sedang dikerjakan</p>
                     </div>
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl">
-                        💰
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl">
+                        ⚙️
                     </div>
                 </div>
             </div>
@@ -128,16 +124,16 @@
                 </div>
             </div>
 
-            <!-- Pending Orders -->
+            <!-- Completed Orders -->
             <div class="stat-card bg-white rounded-[25px] p-6 shadow-sm border border-slate-100">
                 <div class="flex justify-between items-start">
                     <div>
-                        <p class="text-slate-500 text-sm font-medium mb-1">Pesanan Pending</p>
-                        <h3 class="text-3xl font-black text-orange-600">{{ $pendingOrders }}</h3>
-                        <p class="text-xs text-orange-600 font-bold mt-2">Perlu diproses</p>
+                        <p class="text-slate-500 text-sm font-medium mb-1">Pesanan Selesai</p>
+                        <h3 class="text-3xl font-black text-green-600">{{ $completedOrders }}</h3>
+                        <p class="text-xs text-green-600 font-bold mt-2">Berhasil diselesaikan</p>
                     </div>
-                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-2xl">
-                        ⏳
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl">
+                        ✅
                     </div>
                 </div>
             </div>
@@ -163,6 +159,7 @@
                             <tr class="border-b border-slate-200 text-slate-500 font-bold">
                                 <th class="text-left py-3 px-4">Order ID</th>
                                 <th class="text-left py-3 px-4">Pelanggan</th>
+                                <th class="text-left py-3 px-4">Kantin</th>
                                 <th class="text-left py-3 px-4">Item</th>
                                 <th class="text-left py-3 px-4">Total</th>
                                 <th class="text-left py-3 px-4">Status</th>
@@ -175,7 +172,13 @@
                                 <td class="py-4 px-4"><span class="font-bold text-[#122C4F]">{{ $order->order_number }}</span></td>
                                 <td class="py-4 px-4">{{ $order->user->name }}</td>
                                 <td class="py-4 px-4">
-                                    @foreach($order->items as $item)
+                                    <span class="text-xs font-semibold text-blue-600">
+                                        🏪 {{ $order->canteen?->name ?? 'Kantin Utama' }}
+                                    </span>
+                                </td>
+                                <td class="py-4 px-4">
+                                    @php $items = is_string($order->items) ? json_decode($order->items, true) : $order->items; @endphp
+                                    @foreach($items as $item)
                                         {{ $item['name'] }}@if(!$loop->last)<br>@endif
                                     @endforeach
                                 </td>

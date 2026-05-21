@@ -1,94 +1,153 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Food-TyU</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
-</head>
-<body class="bg-gray-200 flex justify-center items-center min-h-screen p-4">
+@extends('layouts.app')
 
-    <div class="w-[375px] h-[812px] bg-[#6A9AB0] shadow-2xl relative flex flex-col rounded-[45px] border-[8px] border-white overflow-hidden">
-        
-        <div class="px-8 pt-12 flex items-center justify-between">
-            <a href="/home" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white transition hover:bg-white/30">
-                <i class="fas fa-chevron-left"></i>
-            </a>
-            <h1 class="text-xl font-extrabold text-[#EAD8B1] tracking-tight">Cart</h1>
-            <div class="w-10"></div> </div>
+@section('content')
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">🛒 Keranjang Belanja</h1>
 
-        <div class="mx-8 mt-6 bg-white/10 backdrop-blur-sm rounded-[20px] p-1.5 flex shadow-inner">
-            <button class="flex-1 bg-[#EAD8B1] text-[#3A6D8C] py-2.5 rounded-[15px] font-bold text-[11px] shadow-md transition">
-                Pick Up At Canteen
-            </button>
-            <button class="flex-1 text-white/80 py-2.5 font-bold text-[11px] hover:text-white transition">
-                Delivery
-            </button>
-        </div>
-
-        <div class="flex-1 px-8 mt-8 space-y-5 overflow-y-auto no-scrollbar">
-            
-            <div class="bg-[#3A6D8C]/80 backdrop-blur-sm p-4 rounded-[30px] flex items-center gap-4 text-white shadow-lg border border-white/10">
-                <div class="w-20 h-20 bg-white rounded-[22px] overflow-hidden shadow-md">
-                    <img src="{{ asset('images/katsu.png') }}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150?text=Katsu'">
-                </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-[13px] leading-tight">Rice Chicken Katsu Curry</h3>
-                    <p class="text-[#EAD8B1] font-black text-[12px] mt-1">RP. 22.000</p>
-                </div>
-                <div class="flex flex-col items-center gap-1 bg-black/20 rounded-xl px-2 py-1.5 border border-white/5">
-                    <button class="text-[14px] hover:text-[#EAD8B1]">+</button>
-                    <span class="text-[12px] font-bold">1</span>
-                    <button class="text-[14px] hover:text-[#EAD8B1]">-</button>
-                </div>
+        @if(session('cart') == null || empty(session('cart')))
+            <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                <p class="text-lg text-gray-600 mb-4">Keranjang Anda kosong</p>
+                <a href="/home" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                    Lanjut Belanja
+                </a>
             </div>
+        @else
+            <form action="{{ route('cart.checkout') }}" method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                @csrf
 
-            <div class="bg-[#3A6D8C]/80 backdrop-blur-sm p-4 rounded-[30px] flex items-center gap-4 text-white shadow-lg border border-white/10">
-                <div class="w-20 h-20 bg-white rounded-[22px] overflow-hidden shadow-md">
-                    <img src="{{ asset('images/seblak.png') }}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/150?text=Seblak'">
+                <!-- Cart Items by Canteen -->
+                <div class="lg:col-span-2 space-y-6">
+                    @foreach($cartByCanteen as $canteenId => $canteenData)
+                        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-600">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-xl font-bold text-gray-900">
+                                    {{ $canteenData['canteen']->name ?? 'Kantin #' . $canteenId }}
+                                </h2>
+                                <label class="flex items-center cursor-pointer">
+                                    <input 
+                                        type="checkbox" 
+                                        name="selected_canteens[]" 
+                                        value="{{ $canteenId }}"
+                                        checked
+                                        class="w-5 h-5 text-blue-600 rounded"
+                                    >
+                                    <span class="ml-2 text-sm text-gray-600">Pilih Kantin</span>
+                                </label>
+                            </div>
+
+                            <!-- Items in this canteen -->
+                            <div class="space-y-3 border-t pt-4">
+                                @foreach($canteenData['items'] as $item)
+                                    <div class="flex items-center justify-between py-2 border-b">
+                                        <div class="flex-1">
+                                            <p class="font-semibold text-gray-900">{{ $item['name'] }}</p>
+                                            <p class="text-sm text-gray-600">Rp {{ number_format($item['price'], 0, ',', '.') }}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <form action="{{ route('cart.update', $item['menu_id']) }}" method="POST" class="flex items-center gap-1">
+                                                @csrf
+                                                @method('PUT')
+                                                <input 
+                                                    type="number" 
+                                                    name="quantity" 
+                                                    value="{{ $item['quantity'] }}"
+                                                    min="1"
+                                                    class="w-12 px-2 py-1 border rounded text-center"
+                                                    onchange="this.form.submit()"
+                                                >
+                                            </form>
+                                            <p class="font-semibold w-24 text-right">
+                                                Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
+                                            </p>
+                                            <form action="{{ route('cart.remove', $item['menu_id']) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Subtotal per canteen -->
+                            <div class="mt-4 pt-4 border-t-2 flex justify-between">
+                                <span class="font-bold text-gray-900">Subtotal Kantin:</span>
+                                <span class="font-bold text-blue-600 text-lg">
+                                    Rp {{ number_format($canteenData['total'], 0, ',', '.') }}
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="flex-1">
-                    <h3 class="font-bold text-[13px] leading-tight">Seblak Special</h3>
-                    <p class="text-[#EAD8B1] font-black text-[12px] mt-1">RP. 13.000</p>
+
+                <!-- Checkout Summary -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-md p-6 sticky top-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">📋 Ringkasan Pesanan</h3>
+
+                        <!-- Voucher -->
+                        <div class="mb-6 pb-6 border-b">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kode Voucher</label>
+                            <div class="flex gap-2">
+                                <input 
+                                    type="text" 
+                                    name="voucher_code" 
+                                    placeholder="Masukkan kode"
+                                    class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Totals -->
+                        <div class="space-y-3 mb-6 pb-6 border-b">
+                            <div class="flex justify-between text-gray-700">
+                                <span>Subtotal:</span>
+                                <span class="font-semibold">Rp {{ number_format($grandTotal, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="flex justify-between text-gray-700">
+                                <span>Diskon:</span>
+                                <span class="font-semibold text-red-600">Rp 0</span>
+                            </div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="flex justify-between mb-6 text-xl">
+                            <span class="font-bold text-gray-900">Total:</span>
+                            <span class="font-bold text-blue-600">Rp {{ number_format($grandTotal, 0, ',', '.') }}</span>
+                        </div>
+
+                        <!-- Checkout Button -->
+                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition">
+                            ✓ Lanjut ke Pembayaran
+                        </button>
+
+                        <!-- Clear Cart -->
+                        <form action="{{ route('cart.clear') }}" method="POST" class="mt-3">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="w-full bg-gray-300 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-400 transition">
+                                Kosongkan Keranjang
+                            </button>
+                        </form>
+
+                        <!-- Continue Shopping -->
+                        <a href="/home" class="block text-center mt-3 text-blue-600 hover:text-blue-700 font-semibold">
+                            ← Lanjut Belanja
+                        </a>
+                    </div>
                 </div>
-                <div class="flex flex-col items-center gap-1 bg-black/20 rounded-xl px-2 py-1.5 border border-white/5">
-                    <button class="text-[14px] hover:text-[#EAD8B1]">+</button>
-                    <span class="text-[12px] font-bold">1</span>
-                    <button class="text-[14px] hover:text-[#EAD8B1]">-</button>
-                </div>
+            </form>
+
+            <!-- Info -->
+            <div class="mt-8 bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>💡 Tip:</strong> Anda dapat memilih kantin mana saja yang ingin dibayar. Pilih checkbox di samping nama kantin untuk memilih, atau kosongkan untuk menghapus dari pesanan.
+                </p>
             </div>
-
-        </div>
-
-        <div class="bg-[#333A44] rounded-t-[45px] p-9 shadow-[0_-10px_40px_rgba(0,0,0,0.3)] border-t border-white/5">
-            <div class="space-y-3 mb-8">
-                <div class="flex justify-between text-white/60 text-[13px] font-medium">
-                    <span>Subtotal</span>
-                    <span class="text-white">RP. 35.000</span>
-                </div>
-                <div class="flex justify-between text-white/60 text-[13px] font-medium">
-                    <span>Delivery</span>
-                    <span class="text-white">RP. 1.000</span>
-                </div>
-                <div class="flex justify-between items-center pt-4 border-t border-white/10">
-                    <span class="text-white font-bold text-lg">Total</span>
-                    <span class="text-[#EAD8B1] font-black text-2xl">RP. 36.000</span>
-                </div>
-            </div>
-            
-            <button class="w-full bg-[#EAD8B1] text-[#333A44] py-4.5 rounded-[22px] font-black text-[14px] shadow-[0_8px_20px_rgba(234,216,177,0.3)] uppercase tracking-widest active:scale-95 transition-all duration-150">
-                Checkout
-            </button>
-        </div>
-
-        <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-white/10 rounded-full"></div>
+        @endif
     </div>
-
-</body>
-</html>
+</div>
+@endsection

@@ -11,9 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Register IsAdmin middleware alias
+        // Register middleware aliases
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
+            'checkRole' => \App\Http\Middleware\CheckRole::class,
+            'checkCanteenAccess' => \App\Http\Middleware\CheckCanteenAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

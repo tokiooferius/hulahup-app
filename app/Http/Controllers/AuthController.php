@@ -67,7 +67,11 @@ class AuthController extends Controller
                 return redirect('/admin/dashboard')->with('success', 'Selamat datang Admin!');
             }
             
-            // Mahasiswa dan user biasa ke halaman home
+            if (Auth::user()->role === 'ibu_kantin') {
+                return redirect('/canteen/dashboard')->with('success', 'Selamat datang, Ibu Kantin!');
+            }
+            
+            // User biasa ke halaman home
             return redirect('/home')->with('success', 'Login berhasil! Selamat datang ' . Auth::user()->name . '!');
         }
 
