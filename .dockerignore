@@ -1,0 +1,44 @@
+# Version control
+.git
+.gitignore
+
+# Node
+node_modules
+
+# PHP vendor (installed inside Docker)
+vendor
+
+# Built frontend assets (built inside Docker)
+public/build
+public/hot
+public/storage
+
+# Environment files (injected at runtime via Railway env vars)
+.env
+.env.*
+!.env.example
+
+# Laravel runtime / cache (generated inside container)
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+bootstrap/cache/*.php
+
+# Dev tooling
+.phpunit.cache
+.phpunit.result.cache
+.phpactor.json
+.idea
+.vscode
+.nova
+.fleet
+.zed
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs (not needed in the image)
+*.md
+DEPLOYMENT_CHECKLIST.json
