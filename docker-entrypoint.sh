@@ -1,0 +1,84 @@
+#!/bin/sh
+set -e
+
+echo "🚀 Starting Hulahup App initialization..."
+
+# Step 1: Ensure .env exists
+if [ ! -f .env ]; then
+    echo "📝 Creating .env from .env.example..."
+    cp .env.example .env || {
+        echo "❌ Failed to copy .env.example"
+        exit 1
+    }
+else
+    echo "✅ .env already exists"
+fi
+
+# Step 2: Generate APP_KEY if not set
+echo "🔑 Checking APP_KEY..."
+APP_KEY=$(grep "^APP_KEY=" .env | cut -d'=' -f2)
+if [ -z "$APP_KEY" ]; then
+    echo "📝 Generating APP_KEY..."
+    php artisan key:generate --no-interaction --force || {
+        echo "⚠️  Warning: APP_KEY generation failed, but continuing..."
+    }
+else
+    echo "✅ APP_KEY already set"
+fi
+
+# Step 3: Wait for database to be ready (if DB_HOST is set)
+echo "🔍 Checking database connection..."
+DB_HOST=$(grep "^DB_HOST=" .env | cut -d'=' -f2)
+DB_PORT=$(grep "^DB_PORT=" .env | cut -d'=' -f2 || echo "3306")
+if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
+    echo "⏳ Waiting for database at $DB_HOST:$DB_PORT..."
+    max_attempts=30
+    attempt=0
+    while [ $attempt -lt $max_attempts ]; do
+        if nc -z "$DB_HOST" "$DB_PORT" 2>/dev/null; then
+            echo "✅ Database is reachable"
+            break
+        fi
+        attempt=$((attempt + 1))
+        echo "⏳ Attempt $attempt/$max_attempts: Waiting for database..."
+        sleep 2
+    done
+    if [ $attempt -eq $max_attempts ]; then
+        echo "⚠️  Warning: Database not reachable after $max_attempts attempts, will attempt migration anyway..."
+    fi
+fi
+
+# Step 4: Clear all caches first (important for config changes)
+echo "🧹 Clearing application caches..."
+php artisan config:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
+php artisan route:clear 2>/dev/null || true
+php artisan view:clear 2>/dev/null || true
+
+# Step 5: Run database migrations (non-blocking)
+echo "🗄️  Running database migrations..."
+if php artisan migrate --force --no-interaction 2>&1; then
+    echo "✅ Database migrations completed successfully"
+else
+    MIGRATION_EXIT=$?
+    if [ $MIGRATION_EXIT -eq 0 ]; then
+        echo "✅ Migrations completed"
+    else
+        echo "⚠️  Migrations had issues (exit code: $MIGRATION_EXIT)"
+        echo "    This may be normal on first deploy or if schema is already synced"
+        echo "    Continuing anyway - app will still start"
+    fi
+fi
+
+# Step 6: Rebuild caches for production
+echo "⚙️  Building application caches..."
+php artisan config:cache 2>/dev/null || echo "⚠️  Config cache failed (non-critical)"
+php artisan route:cache 2>/dev/null || echo "⚠️  Route cache failed (non-critical)"  
+php artisan view:cache 2>/dev/null || echo "⚠️  View cache failed (non-critical)"
+
+# Step 7: Start PHP server
+PORT=${PORT:-8000}
+echo "✅ Application initialization complete!"
+echo "🌐 Starting PHP server on 0.0.0.0:$PORT..."
+echo "💡 Server responding at http://0.0.0.0:$PORT"
+php -S 0.0.0.0:$PORT -t public

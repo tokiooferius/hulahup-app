@@ -28,6 +28,7 @@ RUN apk add --no-cache \
         curl \
         git \
         unzip \
+        netcat-openbsd \
         libpng-dev \
         libjpeg-turbo-dev \
         libwebp-dev \
@@ -74,20 +75,28 @@ COPY --from=frontend /app/public/build ./public/build
 # Run composer scripts that require the full app to be present
 RUN composer run-script post-autoload-dump --no-interaction
 
-# Create the .env file from the example if one is not present at runtime,
-# and ensure storage/bootstrap directories are writable
+# Step 1: Copy .env from .env.example at build time to ensure it exists
+RUN cp .env.example .env || true
+
+# Step 2: Generate APP_KEY during build if not present
+RUN php artisan key:generate --no-interaction --force || true
+
+# Step 3: Create required storage directories
 RUN mkdir -p storage/framework/{sessions,views,cache/data} \
              storage/logs \
              bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# Step 4: Copy entrypoint script and make it executable
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Expose the port PHP's built-in server will listen on
 EXPOSE 8000
 
-# Entrypoint: generate app key if missing, run migrations, cache config, then serve
-CMD php artisan key:generate --no-interaction --force 2>/dev/null || true \
-    && php artisan migrate --force --no-interaction \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php -S 0.0.0.0:${PORT:-8000} -t public
+# Health check to ensure app is responding
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/ || exit 1
+
+# Use entrypoint script for robust initialization
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
