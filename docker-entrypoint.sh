@@ -3,16 +3,20 @@ set -e
 
 echo "🚀 Starting Hulahup App initialization..."
 
-# Step 1: Ensure .env exists
-if [ ! -f .env ]; then
-    echo "📝 Creating .env from .env.example..."
-    cp .env.example .env || {
-        echo "❌ Failed to copy .env.example"
+# Step 1: Generate .env with actual environment variable values
+# Replaces shell placeholders like ${DB_HOST:-127.0.0.1} with real values
+echo "📝 Generating .env from .env.example with runtime environment variables..."
+cat .env.example \
+    | sed "s|\${DB_HOST:-[^}]*}|${DB_HOST:-127.0.0.1}|g" \
+    | sed "s|\${DB_PORT:-[^}]*}|${DB_PORT:-3306}|g" \
+    | sed "s|\${DB_NAME:-[^}]*}|${DB_DATABASE:-hulahup_db}|g" \
+    | sed "s|\${DB_USER:-[^}]*}|${DB_USERNAME:-root}|g" \
+    | sed "s|\${DB_PASSWORD:-[^}]*}|${DB_PASSWORD:-}|g" \
+    > .env || {
+        echo "❌ Failed to generate .env"
         exit 1
     }
-else
-    echo "✅ .env already exists"
-fi
+echo "✅ .env generated with runtime values"
 
 # Step 2: Generate APP_KEY if not set
 echo "🔑 Checking APP_KEY..."

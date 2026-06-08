@@ -75,19 +75,13 @@ COPY --from=frontend /app/public/build ./public/build
 # Run composer scripts that require the full app to be present
 RUN composer run-script post-autoload-dump --no-interaction
 
-# Step 1: Copy .env from .env.example at build time to ensure it exists
-RUN cp .env.example .env || true
-
-# Step 2: Generate APP_KEY during build if not present
-RUN php artisan key:generate --no-interaction --force || true
-
-# Step 3: Create required storage directories
+# Create required storage directories
 RUN mkdir -p storage/framework/{sessions,views,cache/data} \
              storage/logs \
              bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Step 4: Copy entrypoint script and make it executable
+# Copy entrypoint script and make it executable
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
