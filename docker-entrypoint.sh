@@ -106,46 +106,10 @@ php artisan config:cache 2>/dev/null || echo "⚠️  Config cache failed (non-c
 php artisan route:cache 2>/dev/null || echo "⚠️  Route cache failed (non-critical)"  
 php artisan view:cache 2>/dev/null || echo "⚠️  View cache failed (non-critical)"
 
-# Step 7: Start PHP server with Laravel routing
+# Step 7: Start PHP server
 PORT=${PORT:-8000}
 echo "✅ Application initialization complete!"
-echo "🌐 Starting PHP server on 0.0.0.0:$PORT..."
-echo "💡 Server responding at http://0.0.0.0:$PORT"
+echo "🌐 Starting Laravel application server on 0.0.0.0:$PORT..."
 
-# Create simple router script - let PHP handle all routing via index.php
-mkdir -p /tmp
-cat > /tmp/router.php << 'ROUTER'
-<?php
-// Get request URI
-$uri = $_SERVER['REQUEST_URI'] ?? '/';
-$path = parse_url($uri, PHP_URL_PATH) ?: '/';
-$path = rawurldecode($path);
-
-// Serve static files directly
-$public_dir = '/app/public';
-$requested_file = $public_dir . $path;
-
-// Check if it's a real file (not directory)
-if (file_exists($requested_file) && is_file($requested_file)) {
-    // Let PHP server serve static file directly
-    return false;
-}
-
-// Default: route to index.php for Laravel routing
-$index = $public_dir . '/index.php';
-if (!file_exists($index)) {
-    http_response_code(500);
-    die("ERROR: index.php not found at $index");
-}
-
-// Set required variables for Laravel
-$_SERVER['SCRIPT_FILENAME'] = $index;
-$_SERVER['SCRIPT_NAME'] = '/index.php';
-$_SERVER['PHP_SELF'] = '/index.php';
-
-// Include Laravel's entry point
-require $index;
-ROUTER
-
-# Start PHP server with router
-cd /app && php -S 0.0.0.0:$PORT -r /tmp/router.php 2>&1
+# Use Laravel's built-in server (more reliable than php -S with router)
+cd /app && php artisan serve --host=0.0.0.0 --port=$PORT
