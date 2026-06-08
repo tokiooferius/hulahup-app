@@ -98,21 +98,30 @@ php artisan config:cache 2>/dev/null || echo "⚠️  Config cache failed (non-c
 php artisan route:cache 2>/dev/null || echo "⚠️  Route cache failed (non-critical)"  
 php artisan view:cache 2>/dev/null || echo "⚠️  View cache failed (non-critical)"
 
-# Step 7: Start PHP server with proper router for Laravel routing
+# Step 7: Start PHP server with Laravel routing
 PORT=${PORT:-8000}
 echo "✅ Application initialization complete!"
-echo "🌐 Starting PHP server on 0.0.0.0:$PORT with Laravel routing..."
+echo "🌐 Starting PHP server on 0.0.0.0:$PORT..."
 echo "💡 Server responding at http://0.0.0.0:$PORT"
 
-# Create router script for Laravel routing
-cat > /tmp/server.php << 'ROUTER'
+# Create router script with absolute paths
+mkdir -p /tmp
+cat > /tmp/router.php << 'ROUTER'
 <?php
+// Get request URI
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
-if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
+
+// Check if file exists in public directory (for static files)
+$file = '/app/public' . $uri;
+if ($uri !== '/' && file_exists($file) && is_file($file)) {
+    // Serve static file directly
     return false;
 }
-require_once __DIR__ . '/public/index.php';
+
+// Route all other requests to index.php (Laravel routing)
+$_SERVER['REQUEST_URI'] = $uri;
+require '/app/public/index.php';
 ROUTER
 
-# Start PHP server with router
-cd /app && php -S 0.0.0.0:$PORT -t public -r /tmp/server.php
+# Start PHP server with router from /app directory
+cd /app && exec php -S 0.0.0.0:$PORT -r /tmp/router.php
