@@ -98,9 +98,21 @@ php artisan config:cache 2>/dev/null || echo "⚠️  Config cache failed (non-c
 php artisan route:cache 2>/dev/null || echo "⚠️  Route cache failed (non-critical)"  
 php artisan view:cache 2>/dev/null || echo "⚠️  View cache failed (non-critical)"
 
-# Step 7: Start PHP server
+# Step 7: Start PHP server with proper router for Laravel routing
 PORT=${PORT:-8000}
 echo "✅ Application initialization complete!"
-echo "🌐 Starting PHP server on 0.0.0.0:$PORT..."
+echo "🌐 Starting PHP server on 0.0.0.0:$PORT with Laravel routing..."
 echo "💡 Server responding at http://0.0.0.0:$PORT"
-php -S 0.0.0.0:$PORT -t public
+
+# Create router script for Laravel routing
+cat > /tmp/server.php << 'ROUTER'
+<?php
+$uri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
+    return false;
+}
+require_once __DIR__ . '/public/index.php';
+ROUTER
+
+# Start PHP server with router
+cd /app && php -S 0.0.0.0:$PORT -t public -r /tmp/server.php
