@@ -3,16 +3,21 @@ set -e
 
 echo "🚀 Starting Hulahup App initialization..."
 
-# Step 1: Ensure .env exists
-if [ ! -f .env ]; then
-    echo "📝 Creating .env from .env.example..."
-    cp .env.example .env || {
-        echo "❌ Failed to copy .env.example"
-        exit 1
-    }
-else
-    echo "✅ .env already exists"
-fi
+# Step 1: Generate .env with actual environment variable values
+echo "📝 Generating .env from .env.example..."
+export APP_KEY="${APP_KEY:-}"
+export APP_URL="${APP_URL:-https://your-domain.railway.app}"
+export DB_HOST="${DB_HOST:-127.0.0.1}"
+export DB_PORT="${DB_PORT:-3306}"
+export DB_DATABASE="${DB_DATABASE:-hulahup_db}"
+export DB_USERNAME="${DB_USERNAME:-root}"
+export DB_PASSWORD="${DB_PASSWORD:-}"
+envsubst '${APP_KEY} ${APP_URL} ${DB_HOST} ${DB_PORT} ${DB_DATABASE} ${DB_USERNAME} ${DB_PASSWORD}' \
+    < .env.example > .env || {
+    echo "❌ Failed to generate .env"
+    exit 1
+}
+echo "✅ .env generated successfully"
 
 # Step 2: Generate APP_KEY if not set
 echo "🔑 Checking APP_KEY..."
