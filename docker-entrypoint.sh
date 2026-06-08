@@ -31,6 +31,8 @@ export QUEUE_CONNECTION="${QUEUE_CONNECTION:-database}"
 envsubst '${APP_NAME} ${APP_ENV} ${APP_KEY} ${APP_DEBUG} ${APP_URL} ${APP_LOCALE} ${APP_FALLBACK_LOCALE} ${APP_FAKER_LOCALE} ${LOG_CHANNEL} ${LOG_LEVEL} ${DB_CONNECTION} ${DB_HOST} ${DB_PORT} ${DB_DATABASE} ${DB_USERNAME} ${DB_PASSWORD} ${SESSION_DRIVER} ${CACHE_STORE} ${QUEUE_CONNECTION}' < .env.example > .env
 
 echo "✅ .env generated with runtime values"
+echo "📋 Generated .env content (first 10 lines):"
+head -10 .env
 
 # Step 2: Generate APP_KEY if not set
 echo "🔑 Checking APP_KEY..."
@@ -48,6 +50,8 @@ fi
 echo "🔍 Checking database connection..."
 DB_HOST=$(grep "^DB_HOST=" .env | cut -d'=' -f2)
 DB_PORT=$(grep "^DB_PORT=" .env | cut -d'=' -f2 || echo "3306")
+DB_USERNAME=$(grep "^DB_USERNAME=" .env | cut -d'=' -f2)
+echo "   Database: $DB_HOST:$DB_PORT as $DB_USERNAME"
 if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
     echo "⏳ Waiting for database at $DB_HOST:$DB_PORT..."
     max_attempts=30
