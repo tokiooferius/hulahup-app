@@ -81,13 +81,17 @@ RUN mkdir -p storage/framework/{sessions,views,cache/data} \
              bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+# Create .env from example so artisan commands can run
+RUN cp .env.example .env || true
+
 # Expose the port PHP's built-in server will listen on
 EXPOSE 8000
 
 # Entrypoint: generate app key if missing, run migrations, cache config, then serve
-CMD php artisan key:generate --no-interaction --force 2>/dev/null || true \
-    && php artisan migrate --force --no-interaction \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php -S 0.0.0.0:${PORT:-8000} -t public
+# Use semicolons with individual fallbacks so the PHP server always starts
+CMD php artisan key:generate --no-interaction --force 2>/dev/null || true; \
+    php artisan migrate --force --no-interaction || echo "Migration failed, continuing..."; \
+    php artisan config:cache || true; \
+    php artisan route:cache || true; \
+    php artisan view:cache || true; \
+    php -S 0.0.0.0:${PORT:-8000} -t public
