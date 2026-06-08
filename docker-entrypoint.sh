@@ -3,21 +3,30 @@ set -e
 
 echo "🚀 Starting Hulahup App initialization..."
 
-# Step 1: Ensure .env exists
-if [ ! -f .env ]; then
-    echo "📝 Creating .env from .env.example..."
-    cp .env.example .env || {
-        echo "❌ Failed to copy .env.example"
-        exit 1
-    }
-else
-    echo "✅ .env already exists"
-fi
+# Step 1: Generate .env from .env.example with environment variables
+echo "📝 Generating .env from .env.example with runtime environment variables..."
+
+# Export environment variables for envsubst (set defaults if not present)
+export APP_NAME="${APP_NAME:-Hulahup App}"
+export APP_ENV="${APP_ENV:-production}"
+export APP_URL="${APP_URL:-https://your-app.railway.app}"
+export APP_LOCALE="${APP_LOCALE:-id}"
+export DB_HOST="${DB_HOST:-127.0.0.1}"
+export DB_PORT="${DB_PORT:-3306}"
+export DB_DATABASE="${DB_DATABASE:-hulahup_db}"
+export DB_USERNAME="${DB_USERNAME:-root}"
+export DB_PASSWORD="${DB_PASSWORD:-}"
+export LOG_LEVEL="${LOG_LEVEL:-error}"
+
+# Use envsubst to expand all environment variables
+envsubst '${APP_NAME} ${APP_ENV} ${APP_KEY} ${APP_DEBUG} ${APP_URL} ${APP_LOCALE} ${APP_FALLBACK_LOCALE} ${APP_FAKER_LOCALE} ${LOG_CHANNEL} ${LOG_LEVEL} ${DB_CONNECTION} ${DB_HOST} ${DB_PORT} ${DB_DATABASE} ${DB_USERNAME} ${DB_PASSWORD} ${SESSION_DRIVER} ${CACHE_STORE} ${QUEUE_CONNECTION}' < .env.example > .env
+
+echo "✅ .env generated with runtime values"
 
 # Step 2: Generate APP_KEY if not set
 echo "🔑 Checking APP_KEY..."
 APP_KEY=$(grep "^APP_KEY=" .env | cut -d'=' -f2)
-if [ -z "$APP_KEY" ]; then
+if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "\${APP_KEY}" ]; then
     echo "📝 Generating APP_KEY..."
     php artisan key:generate --no-interaction --force || {
         echo "⚠️  Warning: APP_KEY generation failed, but continuing..."

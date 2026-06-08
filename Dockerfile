@@ -29,6 +29,7 @@ RUN apk add --no-cache \
         git \
         unzip \
         netcat-openbsd \
+        gettext \
         libpng-dev \
         libjpeg-turbo-dev \
         libwebp-dev \
